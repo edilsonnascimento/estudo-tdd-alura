@@ -1,5 +1,6 @@
 package br.com.alura.tdd.service;
 
+import br.com.alura.tdd.exception.EstudoTddAluraExpcetion;
 import br.com.alura.tdd.modelo.Funcionario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static br.com.alura.tdd.modelo.Constantes.MAX_BONUS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class BonusServiceTest {
 
@@ -19,20 +22,21 @@ public class BonusServiceTest {
     }
 
     @Test
-    void DEVE_Zerar_Bonus_Quando_Valor_Atingir_Maximo () {
+    void DEVE_Lancar_Exception_Quando_Valor_Bonus_Acima_Do_Limite_Maximo () {
         //given
         var funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("25000"));
-        var expected = new BigDecimal("0.00");
+        var expected = "Valor do bonus acima do limite maximo de " + MAX_BONUS;
 
         //when
-        var actual = service.calcularBonus(funcionario);
+        var excepetion = assertThrows(EstudoTddAluraExpcetion.class, ()-> service.calcularBonus(funcionario));
+        var actual = excepetion.getMessage();
 
         //then
         assertEquals(expected, actual);
     }
 
     @Test
-    void DEVE_Retornar_Dez_Por_Cento_do_Salario_Acima_Do_Limite_Maximo () {
+    void DEVE_Retornar_Dez_Por_Cento_do_Salario_Abaixo_Do_Limite_Maximo () {
         //given
         var funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("2500"));
         var expected = new BigDecimal("250.00");
