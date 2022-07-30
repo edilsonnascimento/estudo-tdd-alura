@@ -15,16 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class BonusServiceTest {
 
     private BonusService service;
+    private Funcionario funcionario;
 
     @BeforeEach
     void start() {
-        service = new BonusService();
+        this.service = new BonusService();
+        this.funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("10000"));
     }
 
     @Test
     void DEVE_Lancar_Exception_Quando_Valor_Bonus_Acima_Do_Limite_Maximo () {
         //given
-        var funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("25000"));
+        funcionario.setSalario(new BigDecimal("25000"));
         var expected = "Valor do bonus acima do limite maximo de " + MAX_BONUS;
 
         //when
@@ -38,7 +40,7 @@ public class BonusServiceTest {
     @Test
     void DEVE_Retornar_Dez_Por_Cento_do_Salario_Abaixo_Do_Limite_Maximo () {
         //given
-        var funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("2500"));
+        funcionario.setSalario(new BigDecimal("2500"));
         var expected = new BigDecimal("250.00");
 
         //when
@@ -51,7 +53,6 @@ public class BonusServiceTest {
     @Test
     void DEVE_Retornar_Dez_Por_Cento_do_Salario_No_Limite_Maximo () {
         //given
-        var funcionario = new Funcionario("Edilson", LocalDate.now(), new BigDecimal("10000"));
         var expected = new BigDecimal("1000.00");
 
         //when
